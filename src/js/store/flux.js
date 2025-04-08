@@ -12,7 +12,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			contacts: []
+
+			
+
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -37,7 +41,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			getContacts: ()=>{
+				fetch("https://playground.4geeks.com/contact/agendas/franco/contacts")
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error("error obteniendo contactos")
+				}
+				return response.json()
+			})
+			.then((data) => { setStore({contacts: data.contacts}) })
+			.catch((error) => { console.log(error) })
+			},
+			setContacts:(contactList)=>{
+				//get the store
+				const store = getStore();
+				setStore({contacts:contactList})
+				
+
+			},
+
+			addContacts: (newContact)=>{
+				const store = getStore();
+				setStore({contacts:[...store.contacts,newContact]});
 			}
+
 		}
 	};
 };
